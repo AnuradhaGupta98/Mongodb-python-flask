@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Details Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px; 
+            padding: 0;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Personal Details</h2>
+<form id="personalDetailsForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" placeholder="Enter your age" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label for="mobile">Mobile:</label>
+    <input type="text" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" placeholder="Enter your address" required>
+
+    <button type="button" onclick="submitDetails()">Submit</button>
+</form>
+
+<div class="message" id="message"></div>
+
+<script>
+    function submitDetails() {
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value;
+        const email = document.getElementById('email').value;
+        const mobile = document.getElementById('mobile').value;
+        const address = document.getElementById('address').value;
+
+        fetch('https://958a-203-81-240-168.ngrok-free.app/records', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, age, email, mobile, address })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('message').innerText = `Record added successfully with ID: ${data.id}`;
+            document.getElementById('personalDetailsForm').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('message').innerText = 'Failed to add record';
+        });
+    }
+</script>
+
+</body>
+</html>
